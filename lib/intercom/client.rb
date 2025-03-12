@@ -136,6 +136,18 @@ module Intercom
       Intercom::Service::PhoneCallRedirect.new(self)
     end
 
+    def ticket_types
+      Intercom::Service::TicketType.new(self)
+    end
+
+    def ticket_type_attributes
+      Intercom::Service::TicketTypeAttribute.new(self)
+    end
+
+    def tickets
+      Intercom::Service::Ticket.new(self)
+    end
+
     def get(path, params)
       execute_request Intercom::Request.get(path, params)
     end

@@ -85,6 +85,8 @@ https://api.intercom.io/help_center/sections
 https://api.intercom.io/phone_call_redirects
 https://api.intercom.io/subscription_types
 https://api.intercom.io/export/content/data
+https://api.intercom.io/ticket_types
+https://api.intercom.io/tickets
 ```
 
 ### Examples
@@ -648,6 +650,97 @@ intercom.articles.find(id: "123456")
 
 # List all articles
 articles = intercom.articles.all
+
+#### Ticket Types
+
+```ruby
+# List all ticket types
+ticket_types = intercom.ticket_types.all
+
+# Create a new ticket type
+ticket_type = intercom.ticket_types.create(
+  name: "Bug Report",
+  description: "Used for tracking bugs",
+  icon: "🐞"
+)
+
+# Find a ticket type
+ticket_type = intercom.ticket_types.find(id: "123456")
+
+# Update a ticket type
+ticket_type = intercom.ticket_types.save(
+  id: "123456",
+  name: "Critical Bug Report",
+  description: "Used for tracking critical bugs",
+  icon: "🔥"
+)
+```
+
+#### Ticket Type Attributes
+
+```ruby
+# Create a new attribute for a ticket type
+attribute = intercom.ticket_type_attributes.create(
+  "123456",
+  {
+    name: "Bug Priority",
+    description: "Priority level of the bug",
+    data_type: "list",
+    required_to_create: true,
+    visible_on_create: true,
+    list_items: "Low Priority,Medium Priority,High Priority"
+  }
+)
+
+# Update an attribute for a ticket type
+attribute = intercom.ticket_type_attributes.update(
+  "123456",
+  "789012",
+  {
+    description: "Updated priority level of the bug",
+    required_to_create: false
+  }
+)
+```
+
+#### Tickets
+
+```ruby
+# Create a ticket
+ticket = intercom.tickets.create(
+  {
+    ticket_type_id: "123456",
+    contacts: [{ id: "existing_contact_id" }],
+    ticket_attributes: {
+      "_default_title_": "Critical login issue",
+      "_default_description_": "Users cannot log in after the latest update",
+      "Bug Priority": "High Priority"
+    }
+  }
+)
+
+# Find a ticket
+ticket = intercom.tickets.find(id: "789012")
+
+# Update a ticket
+ticket = intercom.tickets.save(
+  id: "789012",
+  state: "in_progress",
+  ticket_attributes: {
+    "_default_title_": "Critical login issue - In Progress"
+  }
+)
+
+# Reply to a ticket
+reply = intercom.tickets.reply(
+  "789012",
+  {
+    message_type: "note",
+    admin_id: "admin_id",
+    body: "<p>Working on this issue. Will update soon.</p>"
+  }
+)
+```
 articles.each { |article| p article.title }
 
 # Update an article
